@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- GitHub Pages SEO & Social Sharing -->
+    <title>Born a Crime: Vocabulary Mastery Game</title>
+    <meta name="description" content="An interactive vocabulary learning game for ESL students based on Trevor Noah's 'Born a Crime'.">
+    <meta property="og:title" content="Born a Crime: Vocabulary Mastery Game">
+    <meta property="og:description" content="互動式 ESL 詞彙學習遊戲 - 幫助學生掌握《Born a Crime》第 12 章的核心詞彙。">
+    <meta property="og:type" content="website">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden-translation {
+            color: transparent;
+            background-color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 4px;
+            user-select: none;
+        }
+        .hidden-translation:hover {
+            background-color: #cbd5e1;
+        }
+        .revealed {
+            color: inherit !important;
+            background-color: transparent !important;
+        }
+        .quiz-card {
+            display: none;
+        }
+        .quiz-card.active {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .progress-glow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        /* 防止行動端點擊藍色高亮 */
+        * { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-gray-900 font-sans text-gray-100 pb-20 selection:bg-blue-500 selection:text-white">
+
+    <!-- Game Header -->
+    <header class="bg-blue-800 text-white py-10 px-6 mb-8 text-center shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <div class="grid grid-cols-6 gap-4 rotate-12">
+                <div class="text-4xl">📚</div><div class="text-4xl">❤️</div><div class="text-4xl">🦆</div>
+                <div class="text-4xl">👕</div><div class="text-4xl">👟</div><div class="text-4xl">🍔</div>
+            </div>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-black mb-2 tracking-tighter">VOCABULARY LEVEL UP!</h1>
+        <p class="text-blue-200 text-lg uppercase tracking-widest font-bold">Born a Crime: Chapter 12 Challenge</p>
+        
+        <!-- Score Bar -->
+        <div class="max-w-md mx-auto mt-8 bg-blue-950 rounded-full h-8 p-1 border border-blue-700 relative">
+            <div id="progressBar" class="bg-blue-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-xs font-black">
+                XP: <span id="currentXP">0</span> / 100
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4">
+        
+        <!-- Part 1: Study Zone -->
+        <section class="mb-12 bg-gray-800 rounded-3xl p-8 border-2 border-gray-700">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                <h2 class="text-2xl font-bold text-blue-400">📖 第一階段：記憶特訓 (Study Zone)</h2>
+                <button onclick="revealAll()" class="w-full md:w-auto text-sm bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full transition border border-gray-600">
+                    顯示/隱藏所有翻譯
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <!-- Word Items -->
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition group">
+                    <span class="font-mono text-blue-300 italic">affliction</span>
+                    <span class="hidden-translation translation-text text-gray-300">折磨、痛苦的事</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">acne / pimple</span>
+                    <span class="hidden-translation translation-text text-gray-300">青春痘 / 丘疹</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">allergic reaction</span>
+                    <span class="hidden-translation translation-text text-gray-300">過敏反應</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">ravage</span>
+                    <span class="hidden-translation translation-text text-gray-300">蹂躪、嚴重毀壞</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">unruly afro</span>
+                    <span class="hidden-translation translation-text text-gray-300">蓬亂的爆炸頭</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">baggy blazer</span>
+                    <span class="hidden-translation translation-text text-gray-300">鬆垮的西裝外套</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">duck feet</span>
+                    <span class="hidden-translation translation-text text-gray-300">外八字腳</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">a tuck-shop guy</span>
+                    <span class="hidden-translation translation-text text-gray-300">販賣部伙計/買飯代購</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">stay on the fringe</span>
+                    <span class="hidden-translation translation-text text-gray-300">待在邊緣地帶</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">Murphy's Law</span>
+                    <span class="hidden-translation translation-text text-gray-300">莫非定律</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">stunning</span>
+                    <span class="hidden-translation translation-text text-gray-300">絕美的 / 驚艷的</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">in the interest of survival</span>
+                    <span class="hidden-translation translation-text text-gray-300">為了生存起見</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">stake their claim</span>
+                    <span class="hidden-translation translation-text text-gray-300">宣示主權/佔地盤</span>
+                </div>
+                <div class="flex justify-between p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition">
+                    <span class="font-mono text-blue-300 italic">upset (v.)</span>
+                    <span class="hidden-translation translation-text text-gray-300">打亂 / 擾亂</span>
+                </div>
+            </div>
+            <p class="mt-6 text-center text-gray-500 text-xs italic">準備好了嗎？點擊下方藍色區塊開始測驗！</p>
+        </section>
+
+        <!-- The Game Center -->
+        <section id="gameArea" class="bg-gray-800 rounded-3xl p-8 border-4 border-blue-600 shadow-2xl min-h-[400px]">
+            
+            <!-- Mission 1 -->
+            <div id="mission1" class="quiz-card active">
+                <div class="text-center mb-8">
+                    <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-tighter">Mission 1</span>
+                    <h2 class="text-3xl font-black mt-2">THE MIRROR CHALLENGE</h2>
+                    <p class="text-gray-400 mt-2">Trevor 在描述他的高中外貌。選出最貼切的詞：</p>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-700">
+                        <p class="text-lg italic leading-relaxed text-center">"I had a giant, <span class="text-blue-400 font-bold underline">_______</span> that was impossible to comb."</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button onclick="handleAnswer('mission1', true, 20)" class="p-4 bg-gray-700 rounded-xl hover:bg-blue-600 font-bold transition">unruly afro</button>
+                        <button onclick="handleAnswer('mission1', false)" class="p-4 bg-gray-700 rounded-xl hover:bg-red-600 font-bold transition">decent haircut</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mission 2 -->
+            <div id="mission2" class="quiz-card">
+                <div class="text-center mb-8">
+                    <span class="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-tighter">Mission 2</span>
+                    <h2 class="text-3xl font-black mt-2">THE SOCIAL JUNGLE</h2>
+                    <p class="text-gray-400 mt-2">如何形容 Trevor 在高中的生存方式？</p>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-700 text-center">
+                        <p class="text-lg italic leading-relaxed">"Trevor wasn't a threat to anyone. He was just <span class="text-blue-400 font-bold underline">_______</span>, buying food for all the groups."</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button onclick="handleAnswer('mission2', false)" class="p-4 bg-gray-700 rounded-xl hover:bg-red-600 font-bold transition">the smart move</button>
+                        <button onclick="handleAnswer('mission2', true, 30)" class="p-4 bg-gray-700 rounded-xl hover:bg-blue-600 font-bold transition">a tuck-shop guy</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mission 3 -->
+            <div id="mission3" class="quiz-card">
+                <div class="text-center mb-8">
+                    <span class="bg-purple-500 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-tighter">Mission 3</span>
+                    <h2 class="text-3xl font-black mt-2">THE VALENTINE BOSS</h2>
+                    <p class="text-gray-400 mt-2">約會計畫泡湯了，他會怎麼說？</p>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-700 text-center">
+                        <p class="text-lg italic leading-relaxed">"Everything went wrong at the same time. It was a classic case of <span class="text-blue-400 font-bold underline">_______</span>."</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button onclick="handleAnswer('mission3', true, 50)" class="p-4 bg-gray-700 rounded-xl hover:bg-blue-600 font-bold transition">Murphy's Law</button>
+                        <button onclick="handleAnswer('mission3', false)" class="p-4 bg-gray-700 rounded-xl hover:bg-red-600 font-bold transition">allergic reaction</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="results" class="quiz-card text-center">
+                <h2 class="text-5xl font-black mb-4">GAME OVER!</h2>
+                <div id="finalRankBox" class="p-8 rounded-3xl bg-blue-900/50 mb-8 border-2 border-blue-400">
+                    <p class="text-xl text-blue-300">你的社交等級：</p>
+                    <h3 id="rankTitle" class="text-4xl md:text-6xl font-black my-4 text-white">---</h3>
+                    <p id="rankDesc" class="text-gray-300 italic px-4">---</p>
+                </div>
+                <button onclick="location.reload()" class="bg-white text-blue-900 px-10 py-4 rounded-full font-black text-xl hover:scale-105 transition active:scale-95 shadow-lg">REPLAY 🔄</button>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="mt-16 text-center text-gray-500 text-sm">
+        <p>ESL Game Kit • Based on Born a Crime by Trevor Noah</p>
+        <p class="mt-2 opacity-50">託管於 GitHub Pages • 互動式教學資源</p>
+    </footer>
+
+    <script>
+        let totalXP = 0;
+
+        // Toggle individual translations
+        document.querySelectorAll('.hidden-translation').forEach(item => {
+            item.addEventListener('click', event => {
+                item.classList.toggle('revealed');
+            });
+        });
+
+        function revealAll() {
+            const translations = document.querySelectorAll('.translation-text');
+            const isAnyHidden = Array.from(translations).some(t => !t.classList.contains('revealed'));
+            translations.forEach(t => isAnyHidden ? t.classList.add('revealed') : t.classList.remove('revealed'));
+        }
+
+        function handleAnswer(currentMission, isCorrect, points = 0) {
+            if (isCorrect) {
+                totalXP += points;
+                updateProgress();
+            }
+
+            // Move to next mission with a tiny delay
+            setTimeout(() => {
+                document.getElementById(currentMission).classList.remove('active');
+                
+                let next = "";
+                if(currentMission === 'mission1') next = 'mission2';
+                else if(currentMission === 'mission2') next = 'mission3';
+                else next = 'results';
+
+                document.getElementById(next).classList.add('active');
+                if(next === 'results') calculateRank();
+            }, 300);
+        }
+
+        function updateProgress() {
+            document.getElementById('progressBar').style.width = totalXP + "%";
+            document.getElementById('currentXP').innerText = totalXP;
+        }
+
+        function calculateRank() {
+            const title = document.getElementById('rankTitle');
+            const desc = document.getElementById('rankDesc');
+            const box = document.getElementById('finalRankBox');
+            
+            if (totalXP >= 100) {
+                title.innerText = "COOL GUY 😎";
+                desc.innerText = "你完全掌握了高中的社交公式！你是受歡迎群體的中心！";
+                box.style.borderColor = "#fbbf24";
+            } else if (totalXP >= 50) {
+                title.innerText = "TUCK-SHOP GUY 🍔";
+                desc.innerText = "雖然你還在邊緣地帶，但每個人都喜歡你的「代購服務」！";
+                box.style.borderColor = "#10b981";
+            } else {
+                title.innerText = "NOBODY 🦆";
+                desc.innerText = "就像初期的 Trevor，你還在努力尋找自己的位置。再來挑戰一次吧！";
+                box.style.borderColor = "#ef4444";
+            }
+        }
+    </script>
+</body>
+</html>
